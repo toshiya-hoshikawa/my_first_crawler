@@ -103,3 +103,20 @@ class Crawler(object):
             url = self.q.pop()
             self.get_page(url, media)
 
+def main():
+    if len(sys.argv) > 1:
+        url = sys.argv[1]
+    else:
+        try:
+            url = raw_input('Enter starting URL: ')
+        except (KeyboardInterrupt, EOFError):
+            url = ''
+    if not url:
+        return
+    if not url.startswith('http://') and not url.startswith('ftp://'):
+        url = 'http://%s' % url
+    robot = Crawler(url)
+    robot.go()
+
+if __name__ == '__main__':
+    main()
