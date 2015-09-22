@@ -19,7 +19,7 @@ class Retriever(object):
         parsed = urlparse.urlparse(url)
         host = parsed.netloc.split('@')[-1].split(':')[0]
         filepath = '%s%s' % (host, parsed.path)
-        if not os.path.spiltext(parsed.path)[1]:
+        if not os.path.splitext(parsed.path)[1]:
             filepath = os.path.join(filepath, default)
         linkdir = os.path.dirname(filepath)
         if not os.path.isdir(linkdir):
@@ -86,7 +86,10 @@ class Crawler(object):
                 link = urlparse.urljoin(url, link)
             print '*', link
             if link not in self.seen:
-                if self.dom not in link:
+                parsed = urlparse.urlparse(link)
+                host = parsed.netloc.split('@')[-1].split(':')[0]
+                dom = '.'.join(host.split('.')[-2:])
+                if dom != self.dom:
                     print '... discarded, not in domain'
                 else:
                     if link not in self.q:
